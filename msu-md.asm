@@ -61,14 +61,30 @@ v_MSU_counter	equ $FFF100  ; l
 v_MSU_1upFlag	equ $FFF108  ; b
 v_MSU_lastTrack	equ $FFF110  ; b
 
-Vint_MSUMD:
-    addi.b  #1,(v_MSU_lastTrack).l
+msuExtraLife:
+    move.l  #0,(v_MSU_counter).l
+	move.b  #1,(v_MSU_1upFlag).l
+    rts
+
+Vint_MSUMD:                         ; @TODO reset counter on every new extraLife!
     tst.b   (v_MSU_1upFlag).l
     beq.s   Vint_MSUMD_return       ; return if flag is 0
-    move    (v_MSU_counter).l,d0
-    addi.b  #1,d0
-    move    d0,(v_MSU_counter).l
+
+    move.w 	#($1500|25),MCD_CMD		; Set CD Volume to LOW
+    addq.b 	#1,MCD_CMD_CK 		    ; Increment command clock
+
+    move.l  (v_MSU_counter).l,d0    ; get current counter value
+    addq.b  #1,d0                   ; add 1
+    move.l  d0,(v_MSU_counter).l    ; put increased counter value back into RAM
+    cmp.b   #$FF,d0                 ; compare to appx lenth of 1up sound
+    beq.s   v_MSU_1upFlag_OFF       ; if value matches, then reset and return
 Vint_MSUMD_return:
+    rts
+v_MSU_1upFlag_OFF:
+    move.b  #0,(v_MSU_1upFlag).l
+    move.l  #0,(v_MSU_counter).l
+    move.w 	#($1500|255),MCD_CMD    ; Set CD Volume to MAX
+    addq.b 	#1,MCD_CMD_CK 			; Increment command clock
     rts
 
 PlayMusic:

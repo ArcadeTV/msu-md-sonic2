@@ -22,14 +22,16 @@ Compatibility  Works on real hardware with
                MegaSD* or 
                Cart/CD combo*
                mister*
-               GenesisPlusGX (preferred emulator)
+               RetroArch GenesisPlusGX core (preferred emulator)
                Kega Fusion is not working due to an issue with broken DMA when CD support is active in emulation
                (*untested on my end)
 
 Source:        https://github.com/ArcadeTV/msu-md-sonic2
 Based on:      https://github.com/sonicretro/s2disasm
 
-Date:          2021-01-14
+Source ROM:    Sonic The Hedgehog 2 (World).md (CRC: 24ab4c3a)
+
+Date:          2021-01-22
 
 Category:      Romhack / Music
 Thanks:        SonicRetro, Dustin O'Dell, Krikzz, Conn
@@ -37,7 +39,7 @@ Thanks:        SonicRetro, Dustin O'Dell, Krikzz, Conn
 Soundpacks:    based on "Masato Nakamura from Dreams come True" 
                >> to be released
                based on "Sonic 2 HD" 
-               >> to be released
+               >> https://www.mediafire.com/file/m4t7muho8sfkipn/soundPack_Sonic2-HD.bin/file
 
 
 Driver Source: https://github.com/krikzz/msu-md

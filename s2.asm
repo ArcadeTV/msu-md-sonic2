@@ -191,8 +191,8 @@ EntryPoint:
     
     jsr     MSUMD_DRV
     tst.b 	d0							; if 1: no CD Hardware found
-    ;bne.s	jmpLockout				    ; if no, branch to lockout
-    beq.s	jmpLockout				    ; if no, branch to lockout <- Fix for being able to play on GENS @todo
+    bne.s	jmpLockout				    ; if no, branch to lockout
+    ;beq.s	jmpLockout				    ; if no, branch to lockout <- Fix for being able to play on GENS @todo
     move.w 	#($1500|255),MCD_CMD		; Set CD Volume to MAX
     addq.b 	#1,MCD_CMD_CK 				; Increment command clock
     
@@ -512,7 +512,7 @@ V_Int:
 	andi.w	#$3E,d0
 	move.w	Vint_SwitchTbl(pc,d0.w),d0
 	jsr	Vint_SwitchTbl(pc,d0.w)
-
+	jsr Vint_MSUMD
 VintRet:
 	addq.l	#1,(Vint_runcount).w
 	movem.l	(sp)+,d0-a6
@@ -533,7 +533,6 @@ Vint_PCM_ptr:		offsetTableEntry.w Vint_PCM			; $14
 Vint_Menu_ptr:		offsetTableEntry.w Vint_Menu		; $16
 Vint_Ending_ptr:	offsetTableEntry.w Vint_Ending		; $18
 Vint_CtrlDMA_ptr:	offsetTableEntry.w Vint_CtrlDMA		; $1A
-Vint_MSUMD_ptr:		offsetTableEntry.w Vint_MSUMD		; $1C
 ; ===========================================================================
 ;VintSub0
 Vint_Lag:
@@ -23123,7 +23122,7 @@ CollectRing_1P:
 	addq.b	#1,(Life_count).w	; add 1 to the life count
 	addq.b	#1,(Update_HUD_lives).w	; add 1 to the displayed life count
 	move.w	#MusID_ExtraLife,d0	; prepare to play the extra life jingle
-	move.b  #1,(v_MSU_1upFlag).l
+	jsr 	msuExtraLife
 ; @todo mute msu for 1up sound
 JmpTo_PlaySoundStereo ; JmpTo
 	jmp	(PlaySoundStereo).l
@@ -23158,6 +23157,7 @@ CollectRing_Tails:
 	addq.b	#1,(Life_count_2P).w		; add 1 to the life count
 	addq.b	#1,(Update_HUD_lives_2P).w	; add 1 to the displayed life count
 	move.w	#MusID_ExtraLife,d0		; prepare to play the extra life jingle
+	jsr 	msuExtraLife
 
 JmpTo2_PlaySoundStereo ; JmpTo
 	jmp	(PlaySoundStereo).l
@@ -23851,6 +23851,7 @@ sonic_1up:
 	addq.b	#1,(Life_count).w
 	addq.b	#1,(Update_HUD_lives).w
 	move.w	#MusID_ExtraLife,d0
+	jsr 	msuExtraLife
 	jmp	(PlayMusic).l	; Play extra life music
 	; @todo mute msu for 1up sound
 ; ===========================================================================
@@ -23863,6 +23864,7 @@ tails_1up:
 	addq.b	#1,(Life_count_2P).w
 	addq.b	#1,(Update_HUD_lives_2P).w
 	move.w	#MusID_ExtraLife,d0
+	jsr 	msuExtraLife
 	jmp	(PlayMusic).l	; Play extra life music
 	; @todo mute msu for 1up sound
 ; ===========================================================================
@@ -84238,6 +84240,7 @@ AddPoints:
 	addq.b	#1,(Life_count).w
 	addq.b	#1,(Update_HUD_lives).w
 	move.w	#MusID_ExtraLife,d0
+	jsr 	msuExtraLife
 	jmp	(PlayMusic).l
 	; @todo mute msu for 1up sound
 ; ===========================================================================
@@ -84274,6 +84277,7 @@ AddPoints2:
 	addq.b	#1,(Life_count_2P).w
 	addq.b	#1,(Update_HUD_lives_2P).w
 	move.w	#MusID_ExtraLife,d0
+	jsr 	msuExtraLife
 	jmp	(PlayMusic).l
 	; @todo mute msu for 1up sound
 ; ===========================================================================
