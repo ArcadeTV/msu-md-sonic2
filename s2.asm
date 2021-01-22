@@ -23110,7 +23110,7 @@ CollectRing_1P:
 	ori.b	#1,(Update_HUD_rings).w	; set flag to update the ring counter in the HUD
     endif
 
-	cmpi.w	#1,(Ring_count).w	; does the player 1 have less than 100 rings?
+	cmpi.w	#100,(Ring_count).w	; does the player 1 have less than 100 rings? @todo debug rings modifyer
 	blo.s	JmpTo_PlaySoundStereo	; if yes, play the ring sound
 	bset	#1,(Extra_life_flags).w	; test and set the flag for the first extra life
 	beq.s	+			; if it was clear before, branch
@@ -23955,6 +23955,7 @@ super_shoes_Tails:
 	move.w	#$80,(Tails_deceleration).w
 +
 	move.w	#MusID_SpeedUp,d0
+	jsr 	msuChangeTrackSpeed ; @todo speed up music
 	jmp	(PlayMusic).l	; Speed up tempo
 ; ===========================================================================
 ; ---------------------------------------------------------------------------
@@ -33406,6 +33407,7 @@ Obj01_ChkShoes:		; Checks if Speed Shoes have expired and disables them if they 
 Obj01_RmvSpeed:
 	bclr	#status_sec_hasSpeedShoes,status_secondary(a0)
 	move.w	#MusID_SlowDown,d0	; Slow down tempo
+	jsr 	msuRestoreTrackSpeed ; @todo slow down music
 	jmp	(PlayMusic).l
 ; ---------------------------------------------------------------------------
 ; return_1A15A:

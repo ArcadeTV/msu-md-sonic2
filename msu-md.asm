@@ -162,6 +162,42 @@ findAndPlayTrack:
     rts	
 ; End of function PlayMusic
 
+
+findAndPlayFastTrack:
+    cmp.b   #$82,d0                 ; Emerald Hill Zone (fast)
+    beq     msuPlayTrack_33
+    cmp.b   #$8E,d0                 ; Chemical Plant Zone (fast)
+    beq     msuPlayTrack_34
+    cmp.b   #$87,d0                 ; Aquatic Ruin Zone (fast)
+    beq     msuPlayTrack_35
+    cmp.b   #$89,d0                 ; Casino Night Zone (fast)
+    beq     msuPlayTrack_36
+    cmp.b   #$8B,d0                 ; Mystic Cave Zone (fast)
+    beq     msuPlayTrack_37
+    cmp.b   #$84,d0                 ; Oil Ocean Zone (fast)
+    beq     msuPlayTrack_38
+    cmp.b   #$85,d0                 ; Metropolis Zone (fast)
+    beq     msuPlayTrack_39
+    cmp.b   #$8D,d0                 ; Sky Chase Zone (fast)
+    beq     msuPlayTrack_40
+    cmp.b   #$8F,d0                 ; Wing Fortress Zone (fast)
+    beq     msuPlayTrack_41
+    cmp.b   #$8A,d0                 ; Death Egg Zone (fast)
+    beq     msuPlayTrack_42
+    cmp.b   #$97,d0                 ; Invincibility (fast)
+    beq     msuPlayTrack_43
+    cmp.b   #$8C,d0                 ; Emerald Hill (2 Player) (fast)
+    beq     msuPlayTrack_44
+    cmp.b   #$88,d0                 ; Casino Night (2 Player) (fast)
+    beq     msuPlayTrack_45
+    cmp.b   #$83,d0                 ; Mystic Cave (2 Player) (fast)
+    beq     msuPlayTrack_46
+    cmp.b   #$96,d0                 ; Super Sonic (fast)
+    beq     msuPlayTrack_47    
+    cmp.b   #$86,d0                 ; Hill Top Zone (fast)
+    beq     msuPlayTrack_48    
+    rts
+
 msuPlayTrack_01:                        ; Title
     tst.b   MCD_STAT
     bne.s   msuPlayTrack_01 
@@ -180,6 +216,13 @@ msuPlayTrack_02:                        ; Options
     rts
     
 msuPlayTrack_03:                        ; Emerald Hill Zone
+    move.l	a1,-(sp)                    ; backup a1
+    lea	    (MainCharacter).w,a1        ; a1=character
+    btst	#status_sec_hasSpeedShoes,status_secondary(a1)	; does Sonic have speed	shoes?
+    move.l	(sp)+,a1                    ; restore a1
+	bne.w	msuPlayTrack_33	            ; if yes, branch to play fast track
+
+    move.b  #$82,(v_MSU_lastTrack).l    ; store last played msu track in RAM
     tst.b   MCD_STAT
     bne.s   msuPlayTrack_03 
         
@@ -197,6 +240,13 @@ msuPlayTrack_04:                        ; Act Clear
     rts
     
 msuPlayTrack_05:                        ; Chemical Plant Zone
+    move.l	a1,-(sp)                    ; backup a1
+    lea	    (MainCharacter).w,a1        ; a1=character
+    btst	#status_sec_hasSpeedShoes,status_secondary(a1)	; does Sonic have speed	shoes?
+    move.l	(sp)+,a1                    ; restore a1
+	bne.w	msuPlayTrack_34	            ; if yes, branch to play fast track
+
+    move.b  #$8E,(v_MSU_lastTrack).l    ; store last played msu track in RAM
     tst.b   MCD_STAT
     bne.s   msuPlayTrack_05 
         
@@ -213,7 +263,14 @@ msuPlayTrack_06:                        ; Drowning
     addq.b  #1,MCD_CMD_CK               ; Increment command clock
     rts
     
-msuPlayTrack_07:                        ; Aquatic Ruin Zone        
+msuPlayTrack_07:                        ; Aquatic Ruin Zone
+    move.l	a1,-(sp)                    ; backup a1
+    lea	    (MainCharacter).w,a1        ; a1=character
+    btst	#status_sec_hasSpeedShoes,status_secondary(a1)	; does Sonic have speed	shoes?
+    move.l	(sp)+,a1                    ; restore a1
+	bne.w	msuPlayTrack_35	            ; if yes, branch to play fast track
+
+    move.b  #$87,(v_MSU_lastTrack).l    ; store last played msu track in RAM  
     tst.b   MCD_STAT
     bne.s   msuPlayTrack_07 
        
@@ -222,6 +279,13 @@ msuPlayTrack_07:                        ; Aquatic Ruin Zone
     rts
     
 msuPlayTrack_08:                        ; Casino Nicht Zone
+    move.l	a1,-(sp)                    ; backup a1
+    lea	    (MainCharacter).w,a1        ; a1=character
+    btst	#status_sec_hasSpeedShoes,status_secondary(a1)	; does Sonic have speed	shoes?
+    move.l	(sp)+,a1                    ; restore a1
+	bne.w	msuPlayTrack_36	            ; if yes, branch to play fast track
+
+    move.b  #$89,(v_MSU_lastTrack).l    ; store last played msu track in RAM  
     tst.b   MCD_STAT
     bne.s   msuPlayTrack_08 
         
@@ -231,6 +295,13 @@ msuPlayTrack_08:                        ; Casino Nicht Zone
     rts
     
 msuPlayTrack_09:                        ; Hill Top Zone
+    move.l	a1,-(sp)                    ; backup a1
+    lea	    (MainCharacter).w,a1        ; a1=character
+    btst	#status_sec_hasSpeedShoes,status_secondary(a1)	; does Sonic have speed	shoes?
+    move.l	(sp)+,a1                    ; restore a1
+	bne.w	msuPlayTrack_48	            ; if yes, branch to play fast track
+
+    move.b  #$86,(v_MSU_lastTrack).l    ; store last played msu track in RAM  
     tst.b   MCD_STAT
     bne.s   msuPlayTrack_09 
         
@@ -240,6 +311,13 @@ msuPlayTrack_09:                        ; Hill Top Zone
     rts
     
 msuPlayTrack_10:                        ; Mystic Cave Zone
+    move.l	a1,-(sp)                    ; backup a1
+    lea	    (MainCharacter).w,a1        ; a1=character
+    btst	#status_sec_hasSpeedShoes,status_secondary(a1)	; does Sonic have speed	shoes?
+    move.l	(sp)+,a1                    ; restore a1
+	bne.w	msuPlayTrack_37	            ; if yes, branch to play fast track
+
+    move.b  #$8B,(v_MSU_lastTrack).l    ; store last played msu track in RAM  
     tst.b   MCD_STAT
     bne.s   msuPlayTrack_10 
         
@@ -249,6 +327,13 @@ msuPlayTrack_10:                        ; Mystic Cave Zone
     rts
     
 msuPlayTrack_11:                        ; Oil Ocean Zone
+    move.l	a1,-(sp)                    ; backup a1
+    lea	    (MainCharacter).w,a1        ; a1=character
+    btst	#status_sec_hasSpeedShoes,status_secondary(a1)	; does Sonic have speed	shoes?
+    move.l	(sp)+,a1                    ; restore a1
+	bne.w	msuPlayTrack_38	            ; if yes, branch to play fast track
+
+    move.b  #$84,(v_MSU_lastTrack).l    ; store last played msu track in RAM  
     tst.b   MCD_STAT
     bne.s   msuPlayTrack_11 
         
@@ -258,6 +343,13 @@ msuPlayTrack_11:                        ; Oil Ocean Zone
     rts
     
 msuPlayTrack_12:                        ; Metropolis Zone
+    move.l	a1,-(sp)                    ; backup a1
+    lea	    (MainCharacter).w,a1        ; a1=character
+    btst	#status_sec_hasSpeedShoes,status_secondary(a1)	; does Sonic have speed	shoes?
+    move.l	(sp)+,a1                    ; restore a1
+	bne.w	msuPlayTrack_39	            ; if yes, branch to play fast track
+
+    move.b  #$85,(v_MSU_lastTrack).l    ; store last played msu track in RAM  
     tst.b   MCD_STAT
     bne.s   msuPlayTrack_12 
         
@@ -267,6 +359,13 @@ msuPlayTrack_12:                        ; Metropolis Zone
     rts
     
 msuPlayTrack_13:                        ; Sky Chase Zone
+    move.l	a1,-(sp)                    ; backup a1
+    lea	    (MainCharacter).w,a1        ; a1=character
+    btst	#status_sec_hasSpeedShoes,status_secondary(a1)	; does Sonic have speed	shoes?
+    move.l	(sp)+,a1                    ; restore a1
+	bne.w	msuPlayTrack_40	            ; if yes, branch to play fast track
+
+    move.b  #$8D,(v_MSU_lastTrack).l    ; store last played msu track in RAM  
     tst.b   MCD_STAT
     bne.s   msuPlayTrack_13 
 
@@ -276,6 +375,13 @@ msuPlayTrack_13:                        ; Sky Chase Zone
     rts
     
 msuPlayTrack_14:                        ; Wing Fortress Zone
+    move.l	a1,-(sp)                    ; backup a1
+    lea	    (MainCharacter).w,a1        ; a1=character
+    btst	#status_sec_hasSpeedShoes,status_secondary(a1)	; does Sonic have speed	shoes?
+    move.l	(sp)+,a1                    ; restore a1
+	bne.w	msuPlayTrack_41	            ; if yes, branch to play fast track
+
+    move.b  #$8F,(v_MSU_lastTrack).l    ; store last played msu track in RAM  
     tst.b   MCD_STAT
     bne.s   msuPlayTrack_14 
         
@@ -285,6 +391,13 @@ msuPlayTrack_14:                        ; Wing Fortress Zone
     rts
     
 msuPlayTrack_15:                        ; Death Egg Zone
+    move.l	a1,-(sp)                    ; backup a1
+    lea	    (MainCharacter).w,a1        ; a1=character
+    btst	#status_sec_hasSpeedShoes,status_secondary(a1)	; does Sonic have speed	shoes?
+    move.l	(sp)+,a1                    ; restore a1
+	bne.w	msuPlayTrack_42	            ; if yes, branch to play fast track
+
+    move.b  #$8A,(v_MSU_lastTrack).l    ; store last played msu track in RAM  
     tst.b   MCD_STAT
     bne.s   msuPlayTrack_15 
 
@@ -343,6 +456,12 @@ msuPlayTrack_21:                        ; Game Over
     rts
     
 msuPlayTrack_22:                        ; Invincibility
+    move.l	a1,-(sp)                    ; backup a1
+    lea	    (MainCharacter).w,a1        ; a1=character
+    btst	#status_sec_hasSpeedShoes,status_secondary(a1)	; does Sonic have speed	shoes?
+    move.l	(sp)+,a1                    ; restore a1
+	bne.w	msuPlayTrack_43	            ; if yes, branch to play fast track
+
     tst.b   MCD_STAT
     bne.s   msuPlayTrack_22 
         
@@ -352,6 +471,12 @@ msuPlayTrack_22:                        ; Invincibility
     rts
     
 msuPlayTrack_23:                        ; Super Sonic
+    move.l	a1,-(sp)                    ; backup a1
+    lea	    (MainCharacter).w,a1        ; a1=character
+    btst	#status_sec_hasSpeedShoes,status_secondary(a1)	; does Sonic have speed	shoes?
+    move.l	(sp)+,a1                    ; restore a1
+	bne.w	msuPlayTrack_47	            ; if yes, branch to play fast track
+
     tst.b   MCD_STAT
     bne.s   msuPlayTrack_23 
         
@@ -376,6 +501,13 @@ msuPlayTrack_25:                        ; 2 Player Results
     rts
     
 msuPlayTrack_26:                        ; Emerald Hill (2 Player)
+    move.l	a1,-(sp)                    ; backup a1
+    lea	    (MainCharacter).w,a1        ; a1=character
+    btst	#status_sec_hasSpeedShoes,status_secondary(a1)	; does Sonic have speed	shoes?
+    move.l	(sp)+,a1                    ; restore a1
+	bne.w	msuPlayTrack_44	            ; if yes, branch to play fast track
+
+    move.b  #$8C,(v_MSU_lastTrack).l    ; store last played msu track in RAM  
     tst.b   MCD_STAT
     bne.s   msuPlayTrack_26 
         
@@ -385,6 +517,13 @@ msuPlayTrack_26:                        ; Emerald Hill (2 Player)
     rts
     
 msuPlayTrack_27:                        ; Casino Night (2 Player)
+    move.l	a1,-(sp)                    ; backup a1
+    lea	    (MainCharacter).w,a1        ; a1=character
+    btst	#status_sec_hasSpeedShoes,status_secondary(a1)	; does Sonic have speed	shoes?
+    move.l	(sp)+,a1                    ; restore a1
+	bne.w	msuPlayTrack_45	            ; if yes, branch to play fast track
+
+    move.b  #$88,(v_MSU_lastTrack).l    ; store last played msu track in RAM  
     tst.b   MCD_STAT
     bne.s   msuPlayTrack_27 
         
@@ -394,6 +533,13 @@ msuPlayTrack_27:                        ; Casino Night (2 Player)
     rts
     
 msuPlayTrack_28:                        ; Mystic Cave (2 Player)
+    move.l	a1,-(sp)                    ; backup a1
+    lea	    (MainCharacter).w,a1        ; a1=character
+    btst	#status_sec_hasSpeedShoes,status_secondary(a1)	; does Sonic have speed	shoes?
+    move.l	(sp)+,a1                    ; restore a1
+	bne.w	msuPlayTrack_46	            ; if yes, branch to play fast track
+
+    move.b  #$83,(v_MSU_lastTrack).l    ; store last played msu track in RAM  
     tst.b   MCD_STAT
     bne.s   msuPlayTrack_28 
         
@@ -521,7 +667,7 @@ msuPlayTrack_43:                        ; Invincibility (fast)
     tst.b   MCD_STAT
     bne.s   msuPlayTrack_43 
         
-    move.w  #($1A00|75),MCD_CMD         ; send cmd: play track #43, sloop
+    move.w  #($1A00|43),MCD_CMD         ; send cmd: play track #43, sloop
     move.l  #($00000000|221),MCD_SEEK   ; seek to audio frame when complete
     addq.b  #1,MCD_CMD_CK               ; Increment command clock
     rts
@@ -592,4 +738,25 @@ msuResume:
     bne.s   msuResume 
     move.w  #($1400),MCD_CMD            ; send cmd: resume track
     addq.b  #1,MCD_CMD_CK               ; Increment command clock
+    rts
+
+msuChangeTrackSpeed:                    ; Sonic got shoes
+    move.l	a1,-(sp)                    ; backup a1
+    lea	    (MainCharacter).w,a1        ; a1=character
+    btst	#status_sec_isInvincible,status_secondary(a1)	; is character invincible?
+    move.l	(sp)+,a1
+    bne.w   msuPlayTrack_43             ; play Invincible fast
+    move.b  (v_MSU_lastTrack).l,d0
+    jsr     findAndPlayFastTrack
+    rts
+    
+msuRestoreTrackSpeed:                   ; Sonic lost his shoes
+    move.l	a1,-(sp)                    ; backup a1
+    lea	    (MainCharacter).w,a1        ; a1=character
+    btst	#status_sec_isInvincible,status_secondary(a1)	; is character invincible?
+    move.l	(sp)+,a1                    ; restore a1
+	bne.w	msuPlayTrack_22		        ; if yes, branch, play invincible music
+
+    move.b  (v_MSU_lastTrack).l,d0
+    jsr     findAndPlayTrack
     rts
