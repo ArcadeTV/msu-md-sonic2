@@ -88,6 +88,7 @@ v_MSU_1upFlag_OFF:
     rts
 
 PlayMusic:
+PlayMSU:
 	jsr     findAndPlayTrack
     rts
 

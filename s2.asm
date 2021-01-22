@@ -17,6 +17,9 @@
 ; >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 ; ASSEMBLY OPTIONS:
 ;
+gensCompatible = 0
+; 1 = Don't check for CD Hardware (for debugging in GENS)
+
     ifndef gameRevision
 gameRevision = 1
     endif
@@ -190,9 +193,12 @@ EntryPoint:
     bne.s	jmpLockout		            ; if !=0, branch to lockout
     
     jsr     MSUMD_DRV
+
+	if gensCompatible=0
     tst.b 	d0							; if 1: no CD Hardware found
-    bne.s	jmpLockout				    ; if no, branch to lockout
-    ;beq.s	jmpLockout				    ; if no, branch to lockout <- Fix for being able to play on GENS @todo
+    bne.s	jmpLockout				    ; if 1, branch to lockout
+	endif
+
     move.w 	#($1500|255),MCD_CMD		; Set CD Volume to MAX
     addq.b 	#1,MCD_CMD_CK 				; Increment command clock
     
@@ -11665,7 +11671,15 @@ OptionScreen_Controls:
 	beq.s	+	; rts
 	move.w	(Sound_test_sound).w,d0
 	addi.w	#$80,d0
-	jsrto	(PlayMusic).l, JmpTo_PlayMusic
+
+	; @todo soundtest (Options)
+	cmpi.b  #$A0,d0
+    bpl.s   ID_is_SFX   					; branch if d0-#$A0 is a positive value (Miusic is $81 - $9F)
+	jsr		(PlayMusic).l
+	bra.s   skipSound
+ID_is_SFX:
+	jsr	(PlaySound).l
+skipSound:
 	lea	(level_select_cheat).l,a0
 	lea	(continues_cheat).l,a2
 	lea	(Level_select_flag).w,a1	; Also Slow_motion_flag
@@ -12073,7 +12087,7 @@ LevSelControls_CheckLR:
 	andi.b	#$7F,d0
 
 +
-	move.w	d0,(Sound_test_sound).w
+	move.w	d0,(Sound_test_sound).w ; @todo soundtest (hidden)
 	andi.w	#button_B_mask|button_C_mask,d1
 	beq.s	+	; rts
 	move.w	(Sound_test_sound).w,d0
@@ -12313,7 +12327,7 @@ CheckCheats:	; This is called from 2 places: the options screen and the level se
 	move.b	#$F,(Continue_count).w		; Give 15 continues
 	; The next line causes the bug where the OOZ music plays until reset.
 	; Remove "&$7F" to fix the bug.
-	move.b	#SndID_ContinueJingle&$7F,d0	; Play the continue jingle
+	move.b	#SndID_ContinueJingle,d0	; Play the continue jingle @todo fix applied
 	jsrto	(PlayMusic).l, JmpTo_PlayMusic
 	bra.s	++
 ; ===========================================================================
@@ -12587,7 +12601,7 @@ EndgameCredits:
 	clearRAM Horiz_Scroll_Buf,Horiz_Scroll_Buf_End+4
 
 	moveq	#MusID_Credits,d0
-	jsrto	(PlaySound).l, JmpTo2_PlaySound
+	jsrto	(PlayMusic).l, JmpTo2_PlayMusic ; @todo Changed from PlaySound
 	clr.w	(Target_palette).w
 	move.w	#$EEE,(Target_palette+$C).w
 	move.w	#$EE,(Target_palette_line2+$C).w
