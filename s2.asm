@@ -20,6 +20,9 @@
 gensCompatible = 0
 ; 1 = Don't check for CD Hardware (for debugging in GENS)
 
+debugMonitors = 0
+; places monitors at the beginning of EHZ1 for testing
+
     ifndef gameRevision
 gameRevision = 1
     endif
@@ -23866,7 +23869,7 @@ sonic_1up:
 	addq.b	#1,(Update_HUD_lives).w
 	move.w	#MusID_ExtraLife,d0
 	jsr 	msuExtraLife
-	jmp	(PlayMusic).l	; Play extra life music
+	jmp	(PlaySound).l	; Play extra life music
 	; @todo mute msu for 1up sound
 ; ===========================================================================
 ; ---------------------------------------------------------------------------
@@ -23879,7 +23882,7 @@ tails_1up:
 	addq.b	#1,(Update_HUD_lives_2P).w
 	move.w	#MusID_ExtraLife,d0
 	jsr 	msuExtraLife
-	jmp	(PlayMusic).l	; Play extra life music
+	jmp	(PlaySound).l	; Play extra life music
 	; @todo mute msu for 1up sound
 ; ===========================================================================
 ; ---------------------------------------------------------------------------
@@ -84257,7 +84260,7 @@ AddPoints:
 	addq.b	#1,(Update_HUD_lives).w
 	move.w	#MusID_ExtraLife,d0
 	jsr 	msuExtraLife
-	jmp	(PlayMusic).l
+	jmp	(PlaySound).l
 	; @todo mute msu for 1up sound
 ; ===========================================================================
 +	rts
@@ -84294,7 +84297,7 @@ AddPoints2:
 	addq.b	#1,(Update_HUD_lives_2P).w
 	move.w	#MusID_ExtraLife,d0
 	jsr 	msuExtraLife
-	jmp	(PlayMusic).l
+	jmp	(PlaySound).l
 	; @todo mute msu for 1up sound
 ; ===========================================================================
 +	rts
@@ -88591,7 +88594,11 @@ Off_Objects: zoneOrderedOffsetTable 2,2
 
 	; These things act as boundaries for the object layout parser, so it doesn't read past the end/beginning of the file
 	ObjectLayoutBoundary
+	if debugMonitors=0
 Objects_EHZ_1:	BINCLUDE	"level/objects/EHZ_1.bin"
+	else
+Objects_EHZ_1:	BINCLUDE	"level/objects/EHZ_1_debug.bin"
+	endif
 	ObjectLayoutBoundary
 
     if gameRevision=0
